@@ -1,27 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 
+import { Tweet } from './entities/tweet.entity';
 import { CreateTweetDto } from './dto/create-tweet.dto';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
 
 @Injectable()
 export class TweetsService {
-  create(data: CreateTweetDto) {
-    return 'This action adds a new tweet';
+  constructor(
+    @InjectModel(Tweet)
+    private tweetModel: typeof Tweet
+  ) {}
+
+  public async create(data: CreateTweetDto) {
+    await this.tweetModel.create(data as any);
   }
 
-  findAll() {
-    return `This action returns all tweets`;
+  public async findAll() {
+    return this.tweetModel.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tweet`;
+  public async findOne(id: number) {
+    return this.tweetModel.findOne({ where: { id } });
   }
 
-  update(id: number, data: UpdateTweetDto) {
-    return `This action updates a #${id} tweet`;
+  public async update(id: number, data: UpdateTweetDto) {
+    // await this.prisma.tweet.update({ where: { id }, data });
+    await this.tweetModel.update(data, { where: { id } });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tweet`;
+  public async remove(id: number) {
+    // await this.prisma.tweet.delete({ where: { id } });
+    await this.tweetModel.destroy({ where: { id } });
   }
 }

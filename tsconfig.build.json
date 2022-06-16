@@ -5,6 +5,7 @@
     "jest.*",
     ".prettierrc",
     "tsconfig.*",
-    "test/"
+    "test/",
+    "dist/"
   ]
 }
