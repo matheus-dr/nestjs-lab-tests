@@ -12,25 +12,29 @@ export class TweetsService {
     private tweetModel: typeof Tweet
   ) {}
 
-  public async create(data: CreateTweetDto) {
+  async create(data: CreateTweetDto) {
     await this.tweetModel.create(data as any);
   }
 
-  public async findAll() {
+  async findAll() {
     return this.tweetModel.findAll();
   }
 
-  public async findOne(id: number) {
-    return this.tweetModel.findOne({ where: { id } });
+  async findOne(id: number) {
+    const tweet = await this.tweetModel.findOne({ where: { id } });
+
+    if (!tweet) {
+      throw new Error('Tweet not found');
+    }
+
+    return tweet;
   }
 
-  public async update(id: number, data: UpdateTweetDto) {
-    // await this.prisma.tweet.update({ where: { id }, data });
+  async update(id: number, data: UpdateTweetDto) {
     await this.tweetModel.update(data, { where: { id } });
   }
 
-  public async remove(id: number) {
-    // await this.prisma.tweet.delete({ where: { id } });
+  async remove(id: number) {
     await this.tweetModel.destroy({ where: { id } });
   }
 }

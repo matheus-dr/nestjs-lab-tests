@@ -1,9 +1,11 @@
 import { join } from 'path';
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SequelizeModule } from '@nestjs/sequelize';
 
 import { TweetsModule } from './tweets/tweets.module';
+import { MailingModule } from './mailing/mailing.module';
 
 @Module({
   imports: [
@@ -14,7 +16,14 @@ import { TweetsModule } from './tweets/tweets.module';
       autoLoadModels: true,
       synchronize: true,
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'redis',
+        port: 6379,
+      },
+    }),
     TweetsModule,
+    MailingModule,
   ],
   controllers: [],
   providers: [],

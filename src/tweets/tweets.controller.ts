@@ -17,27 +17,27 @@ export class TweetsController {
   constructor(private readonly tweetsService: TweetsService) {}
 
   @Post()
-  create(@Body() data: CreateTweetDto) {
+  async create(@Body() data: CreateTweetDto) {
     return this.tweetsService.create(data);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.tweetsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.tweetsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() data: UpdateTweetDto) {
+  async update(@Param('id') id: string, @Body() data: UpdateTweetDto) {
     return this.tweetsService.update(+id, data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.tweetsService.remove(+id);
   }
 }

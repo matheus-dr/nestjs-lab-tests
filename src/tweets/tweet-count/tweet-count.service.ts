@@ -1,4 +1,6 @@
+import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
+import { InjectQueue } from '@nestjs/bull';
 import { Interval } from '@nestjs/schedule';
 import { InjectModel } from '@nestjs/sequelize';
 import { Inject, Injectable } from '@nestjs/common';
@@ -13,7 +15,9 @@ export class TweetCountService {
     @InjectModel(Tweet)
     private tweetModel: typeof Tweet,
     @Inject('CACHE_MANAGER')
-    private cache: Cache
+    private cache: Cache,
+    @InjectQueue('emails')
+    private emailsQueue: Queue
   ) {}
 
   @Interval(5000)
@@ -30,12 +34,16 @@ export class TweetCountService {
 
     if (tweets.length === this.limit) {
       await this.cache.set('tweet-offset', offset + this.limit, {
-        ttl: 1 * 60 * 10,
+        ttl: 60 * 10,
       });
 
       console.log(
         `Found ${this.limit} tweets, updating offset to ${offset + this.limit}`
       );
+
+      await this.emailsQueue.add({
+        tweets: tweets.map(tweet => tweet.toJSON()),
+      });
     }
   }
 }
