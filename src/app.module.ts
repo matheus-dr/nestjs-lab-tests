@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+
+import { ModelsModule } from './models/models.module';
+import { MySqlConfigurationModule } from './config/database/mysql/configuration.module';
+import { MySqlDatabaseProviderModule } from './providers/database/mysql/provider.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MySqlConfigurationModule,
+    MySqlDatabaseProviderModule,
+    ModelsModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
