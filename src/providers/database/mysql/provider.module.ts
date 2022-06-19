@@ -1,9 +1,9 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MySqlConfigService } from '../../../config/database/mysql/configuration.service';
 import { MySqlConfigurationModule } from '../../../config/database/mysql/configuration.module';
-import { Author } from '../../../models/author/entities/author.entity';
 
 @Module({
   imports: [
@@ -17,7 +17,9 @@ import { Author } from '../../../models/author/entities/author.entity';
           username: mySqlConfigService.username,
           password: mySqlConfigService.password,
           database: mySqlConfigService.databaseName,
-          entities: [Author],
+          entities: [join(__dirname + '../../../**/*.entity{.ts,.js}')],
+          migrations: [join(__dirname + '../../../database/migrations/')],
+          migrationsRun: true,
         };
       },
       inject: [MySqlConfigService],
