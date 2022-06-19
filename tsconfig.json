@@ -19,11 +19,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "exclude": [
-      "assets",
-      "jest.*",
-      ".prettierrc",
-      "tsconfig.*"
-    ]
+    "esModuleInterop": true
   }
 }
