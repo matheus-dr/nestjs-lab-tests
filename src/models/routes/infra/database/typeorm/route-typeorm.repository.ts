@@ -7,7 +7,7 @@ export class RouteTypeOrmRepository implements IRouteRepository {
   constructor(private ormRepo: Repository<Route>) {}
 
   async insert(route: Route): Promise<void> {
-    await this.ormRepo.save(route);
+    await this.ormRepo.save(await this.ormRepo.create(route));
   }
 
   findAll(): Promise<Route[]> {
